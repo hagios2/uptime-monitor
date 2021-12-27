@@ -1,6 +1,7 @@
 const http = require('http')
 const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
+const {router, handlers } = require('./router.js')
 
 
 //create server to handle all requests
@@ -42,10 +43,37 @@ const server = http.createServer(function(req, res){
         //end the buffer
         payloadBuffer += decoder.end()
 
-        //send the response
-        res.end('Hello World\n')
+        //find a matched handler for the route or notFound handler will be used instead
+        const chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound
 
-        console.log('Request recieved with these headers: ', headers, 'with payload', payloadBuffer)
+        const data = {
+            trimmedPath,
+            queryStringObject,
+            method,
+            headers,
+            payload: payloadBuffer
+        }
+
+        //call the handler with the required params
+        chosenHandler(data, function(statusCode, payload) {
+
+            //check if statuscode is defined
+            statusCode = typeof(statusCode) == 'number' ? statusCode : 200
+
+            //check if response payload is defined
+            payload = typeof(payload) == 'object' ? payload : {}
+
+            //stingify payload
+            const responsePayload = JSON.stringify(payload)
+
+            //send status code
+            res.writeHead(statusCode)
+
+            //return response payload
+            res.end(responsePayload)
+
+            console.log('Returning response with these statuscode: ', statusCode, 'with payload', responsePayload)
+        })
 
     })
 })
