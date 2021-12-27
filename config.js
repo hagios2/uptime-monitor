@@ -3,12 +3,14 @@ let environments = {}
 
 environments.stagging = {
     envName: 'stagging',
-    port: 3000
+    httpsPort: 3001,
+    httpPort: 3000
 }
 
 environments.production = {
     envName: 'production',
-    port: 5000
+    httpPort: 5000,
+    httpsPort: 5001
 }
 
 const currentEnvironment =  typeof(process.env.NODE_ENV) == 'string' ? process.env.NODE_ENV.toLowerCase() : ''

@@ -3,10 +3,41 @@ const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
 const {router, handlers } = require('./router.js')
 const config = require('./config')
+const https = require('http')
+const fs = require('fs')
 
 //create server to handle all requests
-const server = http.createServer(function(req, res){
+const httpServer = http.createServer(function(req, res){
     
+    unifiedServer(req, res)
+})
+
+
+httpServer.listen(config.httpPort, function(){
+    console.log('The server is listening on port ' + config.httpPort)
+})
+
+
+const httpsServerOptions = {
+
+    key: fs.readFileSync('./https/key.pem'),
+    
+    cert: fs.readFileSync('./https/cert.pem')
+}
+
+const httpsServer = https.createServer(httpsServerOptions, function(req, res){
+    
+    unifiedServer(req, res)
+})
+
+
+httpsServer.listen(config.httpsPort, function(){
+    console.log('The server is listening on port ' + config.httpsPort)
+} )
+
+
+const unifiedServer = function () {
+
     //get and parse the url
     const parsedUrl = url.parse( req.url, true) 
 
@@ -77,9 +108,4 @@ const server = http.createServer(function(req, res){
         })
 
     })
-})
-
-
-server.listen(config.port, function(){
-    console.log('The server is listening on port ' + config.port)
-} )
+}
