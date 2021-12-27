@@ -9,9 +9,11 @@ const server = http.createServer(function(req, res){
 
     const trimmedPath = path.replace(/^\/+|\/+$/g, '')
 
+    const method = req.method.toLowerCase()
+
     res.end('Hello World\n')
 
-    console.log('Request recieved on path '+ trimmedPath)
+    console.log('Request recieved on path '+ trimmedPath + 'with this method ' + method)
 
 })
 
