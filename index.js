@@ -1,5 +1,6 @@
 const http = require('http')
 const url = require('url')
+const StringDecoder = require('string_decoder').StringDecoder
 
 
 //create server to handle all requests
@@ -23,11 +24,30 @@ const server = http.createServer(function(req, res){
     //get request headers
     const headers = req.headers
 
-    //send the response
-    res.end('Hello World\n')
+    //getthe request payload
+    const decoder = new StringDecoder('utf-8')
 
-    console.log('Request recieved with these headers: ', headers)
+    let payloadBuffer = ''
 
+    //once the request emit data event to stream chunk of undecoded payload
+    req.on('data', function(data){
+
+        //append a decoded version of the data to the buffer variable
+        payloadBuffer += decoder.write(data) 
+    })
+
+    //check request is done streaming payload
+    req.on('end', function() {
+
+        //end the buffer
+        payloadBuffer += decoder.end()
+
+        //send the response
+        res.end('Hello World\n')
+
+        console.log('Request recieved with these headers: ', headers, 'with payload', payloadBuffer)
+
+    })
 })
 
 
