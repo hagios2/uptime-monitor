@@ -36,7 +36,7 @@ httpsServer.listen(config.httpsPort, function(){
 } )
 
 
-const unifiedServer = function () {
+const unifiedServer = function (req, res) {
 
     //get and parse the url
     const parsedUrl = url.parse( req.url, true) 

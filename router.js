@@ -1,8 +1,8 @@
 let handlers = {}
 
-handlers.sample = function (data, callback) {
+handlers.ping = function (data, callback) {
 
-    callback(200, {name: 'sample handler'})
+    callback(200)
 } 
 
 handlers.notFound = function(data, callback) {
@@ -13,7 +13,7 @@ handlers.notFound = function(data, callback) {
 
 const router = {
 
-    sample: handlers.sample
+    ping: handlers.ping
 }
 
 
