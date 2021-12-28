@@ -1,10 +1,11 @@
 const http = require('http')
 const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
-const {router, handlers } = require('./router.js')
-const config = require('./config')
+const {router, handlers } = require('./lib/router.js')
+const config = require('./lib/config')
 const https = require('http')
 const fs = require('fs')
+const helpers = require('./lib/helpers')
 
 //create server to handle all requests
 const httpServer = http.createServer(function(req, res){
@@ -47,6 +48,8 @@ const unifiedServer = function (req, res) {
     //remove extraneous slashes
     const trimmedPath = path.replace(/^\/+|\/+$/g, '')
 
+    console.log(trimmedPath, 'trimmedpath')
+
     //get the string as an object
     const queryStringObject = parsedUrl.query
 
@@ -77,12 +80,14 @@ const unifiedServer = function (req, res) {
         //find a matched handler for the route or notFound handler will be used instead
         const chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound
 
+        // console.log(JSON.parse(payloadBuffer), 'payload object')
+
         const data = {
             trimmedPath,
             queryStringObject,
             method,
             headers,
-            payload: payloadBuffer
+            payload: JSON.parse(payloadBuffer)
         }
 
         //call the handler with the required params
