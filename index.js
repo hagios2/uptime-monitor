@@ -50,7 +50,7 @@ const unifiedServer = function (req, res) {
 
     console.log(trimmedPath, 'trimmedpath')
 
-    //get the string as an object
+    //get the query string as an object
     const queryStringObject = parsedUrl.query
 
     //get the request method
