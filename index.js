@@ -1,20 +1,17 @@
 const server = require('./lib/server')
 const workers = require('./lib/workers')
 
-const app = {}
-
+let app = {}
 
 //init function 
 app.init = () => {
 
-    server.init()
+    // server.init()
 
-    workers.init()
+    // workers.init()
 
 }
 
 app.init()
-
-
 
 module.exports = app
