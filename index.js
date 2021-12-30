@@ -48,8 +48,6 @@ const unifiedServer = function (req, res) {
     //remove extraneous slashes
     const trimmedPath = path.replace(/^\/+|\/+$/g, '')
 
-    console.log(trimmedPath, 'trimmedpath')
-
     //get the query string as an object
     const queryStringObject = parsedUrl.query
 
@@ -80,14 +78,12 @@ const unifiedServer = function (req, res) {
         //find a matched handler for the route or notFound handler will be used instead
         const chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound
 
-        // console.log(JSON.parse(payloadBuffer), 'payload object')
-
         const data = {
             trimmedPath,
             queryStringObject,
             method,
             headers,
-            payload: JSON.parse(payloadBuffer)
+            payload: payloadBuffer == '' ? {} : JSON.parse(payloadBuffer)
         }
 
         //call the handler with the required params
