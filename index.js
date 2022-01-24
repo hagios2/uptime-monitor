@@ -6,9 +6,9 @@ let app = {}
 //init function 
 app.init = () => {
 
-    // server.init()
+    // server.init
 
-    // workers.init()
+    // workers.init
 
 }
 
